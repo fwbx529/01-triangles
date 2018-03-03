@@ -25,31 +25,35 @@ const GLuint  NumVertices = 6;
 void
 init( void )
 {
-    glGenVertexArrays( NumVAOs, VAOs );
-    glBindVertexArray( VAOs[Triangles] );
-
-    GLfloat  vertices[NumVertices][2] = {
-        { -0.90f, -0.90f }, {  0.85f, -0.90f }, { -0.90f,  0.85f },  // Triangle 1
-        {  0.90f, -0.85f }, {  0.90f,  0.90f }, { -0.85f,  0.90f }   // Triangle 2
+    static const GLfloat vertices[NumVertices][2] =
+    {
+        { -0.90, -0.90 }, // Triangle 1
+        { 0.85, -0.90 },
+        { -0.90, 0.85 },
+        { 0.90, -0.85 }, // Triangle 2
+        { 0.90, 0.90 },
+        { -0.85, 0.90 }
     };
 
-    glCreateBuffers( NumBuffers, Buffers );
-    glBindBuffer( GL_ARRAY_BUFFER, Buffers[ArrayBuffer] );
-    glBufferStorage( GL_ARRAY_BUFFER, sizeof(vertices), vertices, 0);
+    glCreateBuffers(NumBuffers, Buffers);
+    glNamedBufferStorage(Buffers[ArrayBuffer], sizeof(vertices),
+                         vertices, 0);
 
-    ShaderInfo  shaders[] =
-    {
+    ShaderInfo shaders[] = {
         { GL_VERTEX_SHADER, "triangles.vert" },
         { GL_FRAGMENT_SHADER, "triangles.frag" },
         { GL_NONE, NULL }
     };
 
-    GLuint program = LoadShaders( shaders );
-    glUseProgram( program );
+    GLuint program = LoadShaders(shaders);
+    glUseProgram(program);
 
-    glVertexAttribPointer( vPosition, 2, GL_FLOAT,
-                           GL_FALSE, 0, (void*)(0) );
-    glEnableVertexAttribArray( vPosition );
+    glGenVertexArrays(NumVAOs, VAOs);
+    glBindVertexArray(VAOs[Triangles]);
+    glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
+    glVertexAttribPointer(vPosition, 2, GL_FLOAT,
+                          GL_FALSE, 0, (void*)(0));
+    glEnableVertexAttribArray(vPosition);
 }
 
 //----------------------------------------------------------------------------
