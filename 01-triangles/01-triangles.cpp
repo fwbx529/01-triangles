@@ -70,12 +70,14 @@ init( void )
 void
 display( void )
 {
-    static const float black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+    glEnable(GL_POINT_SPRITE);
+    static const float black[] = { 1.0f, 1.0f, 1.0f, 0.0f };
 
     glClearBufferfv(GL_COLOR, 0, black);
 
     glBindVertexArray( VAOs[Triangles] );
-    glDrawArrays( GL_TRIANGLES, 0, NumVertices );
+    glPointSize(100);
+    glDrawArrays( GL_POINTS, 0, NumVertices );
 }
 
 //----------------------------------------------------------------------------

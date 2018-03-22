@@ -10,7 +10,6 @@ using namespace std;
 
 GLuint LoadTex(string imagepath) {
     cv::Mat pic = cv::imread(imagepath, cv::IMREAD_COLOR);
-    cv::flip(pic, pic, 0);
     cout << "Reading image " << imagepath << "\n";
 
     unsigned int width = pic.size().width;
