@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "LoadShaders.h"
+#include "LoadTex.h"
 
 enum VAO_IDs { Triangles, NumVAOs };
 enum Buffer_IDs { ArrayBuffer, NumBuffers };
@@ -14,8 +15,9 @@ enum Attrib_IDs { vPosition = 0 };
 
 GLuint  VAOs[NumVAOs];
 GLuint  Buffers[NumBuffers];
+GLuint  Texture;
 
-const GLuint  NumVertices = 6;
+const GLuint  NumVertices = 3;
 
 //----------------------------------------------------------------------------
 //
@@ -27,12 +29,9 @@ init( void )
 {
     static const GLfloat vertices[NumVertices][2] =
     {
-        { -0.90f, -0.90f }, // Triangle 1
-        { 0.85f, -0.90f },
-        { -0.90f, 0.85f },
-        { 0.90f, -0.85f }, // Triangle 2
-        { 0.90f, 0.90f },
-        { -0.85f, 0.90f }
+        { 1, 1 }, 
+        { 0, 0 },
+        { 0, 1 }
     };
 
     glCreateBuffers(NumBuffers, Buffers);
@@ -54,6 +53,13 @@ init( void )
     glVertexAttribPointer(vPosition, 2, GL_FLOAT,
                           GL_FALSE, 0, (void*)(0));
     glEnableVertexAttribArray(vPosition);
+
+    Texture = LoadTex("amazing.png");
+    GLuint TextureID = glGetUniformLocation(program, "myTextureSampler");
+    glUniform1i(TextureID, 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, Texture);
+
 }
 
 //----------------------------------------------------------------------------
