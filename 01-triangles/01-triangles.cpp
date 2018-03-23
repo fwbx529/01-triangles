@@ -4,6 +4,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
+#include <stdlib.h>
+#include <time.h>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "LoadShaders.h"
@@ -16,8 +19,9 @@ enum Attrib_IDs { vPosition = 0 };
 GLuint  VAOs[NumVAOs];
 GLuint  Buffers[NumBuffers];
 GLuint  Texture;
+GLuint  Time;
 
-const GLuint  NumVertices = 3;
+const GLuint  NumVertices = 100;
 
 //----------------------------------------------------------------------------
 //
@@ -27,12 +31,17 @@ const GLuint  NumVertices = 3;
 void
 init( void )
 {
-    static const GLfloat vertices[NumVertices][2] =
+    glEnable(GL_POINT_SPRITE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    srand((int)time(0));
+    GLfloat vertices[NumVertices][2];
+    for (int i = 0; i < NumVertices; i++)
     {
-        { 1, 1 }, 
-        { 0, 0 },
-        { 0, 1 }
-    };
+        vertices[i][0] = 2.0f * rand() / RAND_MAX - 1;
+        vertices[i][1] = 2.0f * rand() / RAND_MAX - 1;
+    }
 
     glCreateBuffers(NumBuffers, Buffers);
     glNamedBufferStorage(Buffers[ArrayBuffer], sizeof(vertices),
@@ -60,6 +69,8 @@ init( void )
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, Texture);
 
+    Time = glGetUniformLocation(program, "time");
+
 }
 
 //----------------------------------------------------------------------------
@@ -70,8 +81,13 @@ init( void )
 void
 display( void )
 {
-    glEnable(GL_POINT_SPRITE);
+    
     static const float black[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+    static const clock_t time = clock();
+    clock_t time_frame = clock();
+    float delta_time = (float)((time_frame - time) % 1000);
+    
+    glUniform1f(Time, delta_time);
 
     glClearBufferfv(GL_COLOR, 0, black);
 
