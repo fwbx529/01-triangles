@@ -2,10 +2,11 @@
 
 uniform sampler2D myTextureSampler;
 in vec2 pos;
+out vec4 fcolor;
 
 void main()
 {
 	vec2 UV = pos;
-	gl_FragColor = texture( myTextureSampler, gl_PointCoord );
-	if ( gl_FragColor.x > 0.9 && gl_FragColor.y > 0.9 && gl_FragColor.z > 0.9 ) gl_FragColor.w = 0;
+	fcolor = texture( myTextureSampler, gl_PointCoord );
+	if ( fcolor.x > 0.9 && fcolor.y > 0.9 && fcolor.z > 0.9 ) fcolor.w = 0;
 }
