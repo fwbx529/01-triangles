@@ -56,6 +56,24 @@ init( void )
     glEnableVertexAttribArray(vPosition);
 }
 
+void OnKey(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS)
+    {
+        switch (key)
+        {
+        case GLFW_KEY_M:
+        {
+            static GLenum  mode = GL_FILL;
+
+            mode = (mode == GL_FILL ? GL_LINE : GL_FILL);
+            glPolygonMode(GL_FRONT_AND_BACK, mode);
+        }
+        return;
+        }
+    }
+}
+
 //----------------------------------------------------------------------------
 //
 // display
@@ -86,6 +104,7 @@ main( int argc, char** argv )
     GLFWwindow* window = glfwCreateWindow(800, 600, "Triangles", NULL, NULL);
 
     glfwMakeContextCurrent(window);
+    glfwSetKeyCallback(window, OnKey);
     glewExperimental = GL_TRUE;
     glewInit();
 
